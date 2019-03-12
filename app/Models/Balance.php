@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use PhpParser\Node\Expr\Array_;
+use DB;
 
 class Balance extends Model
 {
@@ -11,6 +12,8 @@ class Balance extends Model
 
     public function deposit(float $value) : Array
     {
+        DB::beginTransaction();
+
         $totalBefore = $this->amount ? $this->amount : 0;
         $this->amount += $value;
         $deposit = $this->save();
@@ -24,15 +27,19 @@ class Balance extends Model
         ]);
 
         if ($deposit && $historic){
+            DB::commit();
+
             return [
                 'success' => true,
                 'message' => 'Depósito feito com sucesso'
             ];
-        }
+        } else {
+            DB::rollback();
 
-        return [
-            'success' => false,
-            'message' => 'Falha no depósito'
-        ];
+            return [
+                'success' => false,
+                'message' => 'Falha no depósito'
+            ];
+        }
     }
 }
