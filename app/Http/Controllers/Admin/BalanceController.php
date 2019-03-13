@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Balance;
 use App\Http\Requests\MoneyValidationFormRequest;
+use App\User;
 
 
 class BalanceController extends Controller
@@ -38,17 +39,15 @@ class BalanceController extends Controller
             ->with('error', $response['message']);
     }
 
-    public function withdrawn()
+    public function withdraw()
     {
-        return view('admin.balance.withdrawn');
+        return view('admin.balance.withdraw');
     }
 
-    public function withdrawnStore(MoneyValidationFormRequest $request)
+    public function withdrawStore(MoneyValidationFormRequest $request)
     {
-        dd( $request->all() );
-
         $balance = auth()->user()->balance()->firstOrCreate([]);
-        $response = $balance->deposit($request->value);
+        $response = $balance->withdraw($request->value);
 
         if ($response['success']) {
             return redirect()
@@ -60,5 +59,31 @@ class BalanceController extends Controller
             ->with('error', $response['message']);
     }
 
+    public function transfer()
+    {
+        return view('admin.balance.transfer');
+    }
 
+    public function confirmTransfer(Request $request, User $user)
+    {
+        if( !$sender = $user->getSender($request->sender) )
+        {
+            return redirect()
+                ->back()
+                ->with('error', 'O usuário informado não foi encontrado!');
+        }
+        if ($sender->id === auth()->user()->id)
+        {
+            return redirect()
+                ->back()
+                ->with('error', 'Não é possível transferir para mesmo usuário!');
+        }
+
+        return view('admin.balance.transfer-confirm', compact('sender') );
+    }
+
+    public function transferStore(Request $request)
+    {
+        dd( $request->all() );
+    }
 }
