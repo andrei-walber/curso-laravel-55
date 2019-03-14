@@ -22,7 +22,8 @@
         <div class="box-body">
             @include('admin.includes.alerts')
 
-            <p><strong> Recebedor: </strong> {{ $sender->name }} </p>
+            <p> Recebedor: <strong> {{ $sender->name }} </strong> </p>
+            <p> Saldo atual: <strong> R$ {{ number_format($balance->amount, '2', ',', '.') }} </strong> </p>
 
             <form method="POST" action="{{ route('transfer.store') }}">
                 {!! csrf_field() !!}
@@ -30,7 +31,7 @@
                 <input name="sender_id" type="hidden" value="{{ $sender->id }}">
 
                 <div class="form-group">
-                    <input class='form-control' name="balance" type="text" placeholder="Valor de transferência">
+                    <input class='form-control' name="value" type="text" placeholder="Valor de transferência">
                 </div>
 
                 <div class="form-group">
