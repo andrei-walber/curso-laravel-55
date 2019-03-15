@@ -30,11 +30,17 @@
                 <tbody>
                     @forelse($historics as $historic)
                         <tr>
-                            <th>{{ $historic->id }}</th>
-                            <th>{{ number_format($historic->amount, 2, ',', '.') }}</th>
-                            <th>{{ $historic->type }}</th>
-                            <th>{{ $historic->date }}</th>
-                            <th>{{ $historic->user_id_transaction }}</th>
+                            <td>{{ $historic->id }}</td>
+                            <td>{{ number_format($historic->amount, 2, ',', '.') }}</td>
+                            <td>{{ $historic->type($historic->type) }}</td>
+                            <td>{{ $historic->date }}</td>
+                            <td>
+                                @if($historic->user_id_transaction)
+                                    {{ $historic->user->name }}
+                                @else
+                                    -
+                                @endif
+                            </td>
                         </tr>
                     @empty
                     @endforelse
