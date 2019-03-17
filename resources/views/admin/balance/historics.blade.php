@@ -23,7 +23,7 @@
                         <th>#</th>
                         <th>Valor</th>
                         <th>Tipo</th>
-                        <th>Data</th>
+                        <th>Data</th>}
                         <th>?Sender?</th>
                     </tr>
                 </thead>
@@ -35,8 +35,8 @@
                             <td>{{ $historic->type($historic->type) }}</td>
                             <td>{{ $historic->date }}</td>
                             <td>
-                                @if($historic->user_id_transaction)
-                                    {{ $historic->user->name }}
+                                @if ($historic->user_id_transaction)
+                                    {{ $historic->userSender->name }}
                                 @else
                                     -
                                 @endif
