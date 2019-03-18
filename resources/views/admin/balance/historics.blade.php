@@ -19,7 +19,7 @@
                 <input type="text" name="id" class="form-control" placeholder="ID">
                 <input type="date" name="date" class="form-control">                
                 <select name="type" class="form-control">
-                    <option value=""> Seleciona o tipo </option>
+                    <option value=""> -- Selecione o tipo -- </option>
                     @foreach ($types as $key => $type)
                         <option value="{{ $key }}"> {{ $type }} </option>
                     @endforeach
@@ -57,8 +57,11 @@
                     @endforelse
                 </tbody>
             </table>
-
-            {{ $historics->links() }}
+            @if( isset($dataForm) )
+                {!! $historics->appends($dataForm)->links() !!}
+            @else
+                {!! $historics->links() !!}
+            @endif
         </div>
     </div>
 @stop
